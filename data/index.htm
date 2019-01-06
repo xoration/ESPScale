@@ -1,0 +1,172 @@
+<!--
+    Copyright Stefan Seifert 2018-2019
+
+    This file is part of ESPScale.
+
+    ESPScale is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    ESPScale is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with ESPScale.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="apple-mobile-web-app-title" content="CG Scale" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css" crossorigin="anonymous">
+
+
+  <title>CG Scale</title>
+  <script src="js/combined.js"></script>
+  <script>
+    // iOS Web App Full Screen View
+    $(document).ready(function () {
+      if (window.navigator.standalone == true) {
+        $('a').click(function () {
+          window.location = $(this).attr('href');
+          return false;
+        });
+      }
+    });
+
+    function RefreshData() {
+      $.ajax({
+        url: "/api/scale"
+      }).then(function (data) {
+        $('#CG').html(data.CG);
+        $('#Weight').html(data.Weight);
+
+        var x = document.getElementById("CalibrationNecessary");
+        if (data["CalibrationNecessary"] === true) {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+
+      });
+    }
+
+    $(document).ready(function () {
+      RefreshData();
+
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+    });
+
+    $(function () {
+      $('#index_form').submit(function (e) {
+        e.preventDefault();
+
+        var jsonData = {
+          ModelCg: $('#CG').val(),
+          ModelWeight: $('#Weight').val(),
+          ModelName: $('#ModelName').val(),
+        };
+
+        $.ajax({
+          url: '/api/models',
+          type: 'post',
+          dataType: 'json',
+          data: { 'data': JSON.stringify(jsonData) },
+          success: function (data, textStatus, jQxhr) {
+            $("#result").html('<div class="alert alert-' + data.type + '"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + data.message + '</div>');
+            window.setTimeout(function () {
+              $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+              });
+            }, 5000);
+            $('.alert .close').on("click", function (e) {
+              $(this).parent().remove();
+            });
+          },
+          error: function (jQxhr, textStatus, errorThrown) {
+            $("#result").html('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + errorThrown + '</div>');
+            window.setTimeout(function () {
+              $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+              });
+            }, 5000);
+            $('.alert .close').on("click", function (e) {
+              $(this).parent().remove();
+            });
+          }
+        });
+      });
+    });
+
+    setInterval(RefreshData, 1000);
+
+  </script>
+
+</head>
+
+<body id="body">
+
+  <nav id="navbar-example2" class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="/index.htm">CG Scale</a>
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a class="nav-link" href="/index.htm">
+          <i class="fa fa-home" style="font-size:24px"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/models.htm">Models</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/configuration.htm">Configuration</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container" id="CalibrationNecessary" style="display: none;">>
+    <div class="alert alert-danger">
+      <strong>Calibration Necessary!</strong>
+    </div>
+  </div>
+
+  <form class="form-horizontal" id="index_form">
+    <div class="container" role="main">
+      <div class="panel-heading">Scale Information</div>
+      <div class="panel-body">
+        <table class="table table-hover table-condensed">
+          <tbody id="scale-data">
+            <tr>
+              <th align="left">Center of Gravity</th>
+              <td>
+                <span id="CG"></span> mm</td>
+            </tr>
+            <tr>
+              <th align="left">Weight</th>
+              <td>
+                <span id="Weight"></span> g</td>
+            </tr>
+            <tr>
+              <th><input type="text" class="form-control" id="ModelName"></th>
+              <td><button type="submit" class="btn btn-primary">Save Model</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </form>
+</body>
+
+</html>
