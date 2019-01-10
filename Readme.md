@@ -1,5 +1,7 @@
 # F3X ESPScale
 
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=M9J2VFXKKF4MC&source=url)
+
 This is a open source CG Scale for F3X gliders. With different supports it is suitable for all kinds of model airplanes.
 
 This project is similiar to the famous CG_Scale project (https://github.com/olkal/CG_scale) but it uses a ESP to calculate the CG 
@@ -19,6 +21,6 @@ A demo can be seen in the following video, it does not have all features of the 
 
 [![Demo ESP Scale](https://j.gifs.com/59qmZq.gif)](https://www.youtube.com/watch?v=NDpFU1eD0Ts)
 
-The project uses platformio.
-
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=M9J2VFXKKF4MC&source=url)
+The project uses PlatformIO, so it is recommended to also use PlatformIO to compile and upload it. 
+Also don't forget to upload the filesystem image! The Webpages are not part of the firmware itself.
+In PlatformIO Terminal -> Run Task (ctrl + alt + t) -> "PlatformIO: Upload File System image".
