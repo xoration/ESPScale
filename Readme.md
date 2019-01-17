@@ -23,4 +23,5 @@ A demo can be seen in the following video, it does not have all features of the 
 
 The project uses PlatformIO, so it is recommended to also use PlatformIO to compile and upload it. 
 Also don't forget to upload the filesystem image! The Webpages are not part of the firmware itself.
-In PlatformIO Terminal -> Run Task (ctrl + alt + t) -> "PlatformIO: Upload File System image".
+
+In Visual Studio Code: Terminal -> Run Task (ctrl + alt + t) -> "PlatformIO: Upload File System image".
