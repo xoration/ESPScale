@@ -75,9 +75,9 @@
         e.preventDefault();
 
         var jsonData = {
-          ModelCg: $('#CG').val(),
-          ModelWeight: $('#Weight').val(),
-          ModelName: $('#ModelName').val(),
+          ModelCg: $('#CG')[0].innerText,
+          ModelWeight: $('#Weight')[0].innerText,
+          ModelName: $('#ModelName').val()
         };
 
         $.ajax({

@@ -22,7 +22,7 @@
 #include <SPIFFSEditor.h>
 #include <AsyncJson.h>
 
-#define CONFIGURATIONFILE "/cfg/config"
+#define CONFIGURATIONFILE "/cfg/configuration.jsn"
 
 Configuration::Configuration()
 {
