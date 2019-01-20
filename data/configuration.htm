@@ -60,8 +60,14 @@
       RefreshData();
 
       $.ajax({
-        url: "/api/calibration"
+        url: "/api/settings"
       }).then(function (data) {
+        document.getElementById('Hostname').value = data.Hostname
+        document.getElementById('AutoconnectSsid').value = data.AutoconnectSsid
+        document.getElementById('AutoconnectPassword').value = data.AutoconnectPassword
+        document.getElementById('AccesspointModeSsid').value = data.AccesspointModeSsid
+        document.getElementById('AccesspointModePassword').value = data.AccesspointModePassword
+
         document.getElementById('FrontCalibrationFactor').value = data.FrontCalibrationFactor
         document.getElementById('BackCalibrationFactor').value = data.BackCalibrationFactor
         document.getElementById('WingPegDistance').value = data.WingPegDistance
@@ -78,6 +84,11 @@
         e.preventDefault();
 
         var jsonData = {
+          Hostname: $('#Hostname').val(),
+          AutoconnectSsid: $('#AutoconnectSsid').val(),
+          AutoconnectPassword: $('#AutoconnectPassword').val(),
+          AccesspointModeSsid: $('#AccesspointModeSsid').val(),
+          AccesspointModePassword: $('#AccesspointModePassword').val(),
           FrontCalibrationFactor: $('#FrontCalibrationFactor').val(),
           BackCalibrationFactor: $('#BackCalibrationFactor').val(),
           WingPegDistance: $('#WingPegDistance').val(),
@@ -85,7 +96,7 @@
         };
 
         $.ajax({
-          url: '/api/calibration',
+          url: '/api/settings',
           type: 'post',
           dataType: 'json',
           data: { 'data': JSON.stringify(jsonData) },
@@ -174,6 +185,46 @@
         <table class="table table-hover table-condensed">
           <tbody id="scale-data">
             <tr>
+              <th align="left">Hostname</th>
+              <td>
+                <input type="text" class="form-control" id="Hostname" data-toggle="tooltip" data-html="true"
+                  title="The hostname of the CGScale.">
+              </td>
+            </tr>
+
+            <tr>
+              <th align="left">SSID (autoconnect)</th>
+              <td>
+                <input type="text" class="form-control" id="AutoconnectSsid" data-toggle="tooltip" data-html="true"
+                  title="The SSID of the WLAN to autoconnect to on startup.">
+              </td>
+            </tr>
+
+            <tr>
+              <th align="left">Password</th>
+              <td>
+                <input type="text" class="form-control" id="AutoconnectPassword" data-toggle="tooltip" data-html="true"
+                  title="The password for the WLAN to autoconnect to. (ATTENTION: CURRENTLY THE PASSWORD IS STORED IN PLAINTEXT!)">
+              </td>
+            </tr>
+
+            <tr>
+                <th align="left">SSID (Accesspoint)</th>
+                <td>
+                  <input type="text" class="form-control" id="AccesspointModeSsid" data-toggle="tooltip" data-html="true"
+                    title="The name of the WLAN if autoconnect fails (accesspoint mode).">
+                </td>
+              </tr>
+  
+              <tr>
+                <th align="left">Password</th>
+                <td>
+                  <input type="text" class="form-control" id="AccesspointModePassword" data-toggle="tooltip" data-html="true"
+                    title="The password of the WLAN if autoconnect fails (accesspoint mode).">
+                </td>
+              </tr>
+
+            <tr>
               <th align="left">Wing peg distance (mm)</th>
               <td>
                 <input type="text" class="form-control" id="WingPegDistance" data-toggle="tooltip" data-html="true"
@@ -191,14 +242,14 @@
               <th align="left">Loadcell Front Calibration Factor</th>
               <td>
                 <input type="text" class="form-control" id="FrontCalibrationFactor">
-                <br/>
+                <br />
               </td>
             </tr>
             <tr>
               <th align="left">Loadcell Back Calibration Factor</th>
               <td>
                 <input type="text" class="form-control" id="BackCalibrationFactor">
-                <br/>
+                <br />
               </td>
             </tr>
           </tbody>

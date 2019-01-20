@@ -22,10 +22,14 @@
 #include <SPIFFSEditor.h>
 #include <AsyncJson.h>
 
-#define CONFIGURATIONFILE "/cfg/configuration.jsn"
-
 Configuration::Configuration()
 {
+    hostname = "CGScale";
+    autoconnectSsid = "CGScale";
+    autoconnectPassword = "";
+    accesspointModeSsid = "CGScale";
+    accesspointModePassword = "";
+
     WingPegDistance = 0;
     LengthWingstopperToFrontWingpeg = 0;
     FrontCellCalibrationFactor = 1;
@@ -34,27 +38,40 @@ Configuration::Configuration()
 
 void Configuration::LoadConfiguration()
 {
-    if (SPIFFS.exists(CONFIGURATIONFILE))
+    if (SPIFFS.exists("/configuration.jsn"))
     {
-        File file = SPIFFS.open(CONFIGURATIONFILE, "r");
+        File file = SPIFFS.open("/configuration.jsn", "r");
         String content = file.readStringUntil('\n');
 
         DynamicJsonBuffer jsonBuffer;
         JsonObject &configFile = jsonBuffer.parseObject(content);
+        hostname = configFile["Hostname"].as<String>();;
+        autoconnectSsid = configFile["AutoconnectSsid"].as<String>();
+        autoconnectPassword = configFile["AutoconnectPassword"].as<String>();
+        accesspointModeSsid = configFile["AccesspointModeSsid"].as<String>();
+        accesspointModePassword = configFile["AccesspointModePassword"].as<String>();
+
         FrontCellCalibrationFactor = configFile["FrontcellCalFactor"];
         BackCellCalibrationFactor = configFile["BackcellCalFactor"];
         WingPegDistance = configFile["WingPegDistance"];
         LengthWingstopperToFrontWingpeg = configFile["LengthWingstopperToFrontWingpeg"];
+        
         file.close();
     }
 }
 
 void Configuration::SaveConfiguration()
 {
-    File file = SPIFFS.open(CONFIGURATIONFILE, "w");
+    File file = SPIFFS.open("/configuration.jsn", "w");
 
     DynamicJsonBuffer jsonBuffer;
     JsonObject &configFile = jsonBuffer.createObject();
+    configFile["Hostname"] = hostname;
+    configFile["AutoconnectSsid"] = autoconnectSsid;
+    configFile["AutoconnectPassword"] = autoconnectPassword;
+    configFile["AccesspointModeSsid"] = accesspointModeSsid;
+    configFile["AccesspointModePassword"] = accesspointModePassword;
+
     configFile["FrontcellCalFactor"] = FrontCellCalibrationFactor;
     configFile["BackcellCalFactor"] = BackCellCalibrationFactor;
     configFile["WingPegDistance"] = WingPegDistance;

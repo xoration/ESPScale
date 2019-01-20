@@ -41,8 +41,8 @@ class CgScaleWebApi
     void onWsEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
     void onNotFound(AsyncWebServerRequest *request);
     void OnScaleGet(AsyncWebServerRequest *request);
-    void OnCalibrationScaleGet(AsyncWebServerRequest *request);
-    void OnCalibrationScalePost(AsyncWebServerRequest *request);
+    void OnSettingsGet(AsyncWebServerRequest *request);
+    void OnSettingsPost(AsyncWebServerRequest *request);
     void OnModelsGet(AsyncWebServerRequest *request);
     void OnModelsPost(AsyncWebServerRequest *request);
     void OnModelsDeletePost(AsyncWebServerRequest *request);

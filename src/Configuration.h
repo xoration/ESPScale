@@ -37,6 +37,11 @@ class Configuration
     float LengthWingstopperToFrontWingpeg;
     float FrontCellCalibrationFactor;
     float BackCellCalibrationFactor;
+    String hostname;
+    String autoconnectSsid;
+    String autoconnectPassword;
+    String accesspointModeSsid;
+    String accesspointModePassword;
 };
 
 extern Configuration Config;

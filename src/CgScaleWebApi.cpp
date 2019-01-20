@@ -140,10 +140,16 @@ void CgScaleWebApi::OnScaleGet(AsyncWebServerRequest *request)
     request->send(response);
 }
 
-void CgScaleWebApi::OnCalibrationScaleGet(AsyncWebServerRequest *request)
+void CgScaleWebApi::OnSettingsGet(AsyncWebServerRequest *request)
 {
     AsyncJsonResponse *response = new AsyncJsonResponse();
     JsonObject &root = response->getRoot();
+
+    root[F("Hostname")] = Config.hostname;
+    root[F("AutoconnectSsid")] = Config.autoconnectSsid;
+    root[F("AutoconnectPassword")] = Config.autoconnectPassword;
+    root[F("AccesspointModeSsid")] = Config.accesspointModeSsid;
+    root[F("AccesspointModePassword")] = Config.accesspointModePassword;
 
     root[F("FrontCalibrationFactor")] = Config.FrontCellCalibrationFactor;
     root[F("BackCalibrationFactor")] = Config.BackCellCalibrationFactor;
@@ -154,7 +160,7 @@ void CgScaleWebApi::OnCalibrationScaleGet(AsyncWebServerRequest *request)
     request->send(response);
 }
 
-void CgScaleWebApi::OnCalibrationScalePost(AsyncWebServerRequest *request)
+void CgScaleWebApi::OnSettingsPost(AsyncWebServerRequest *request)
 {
     AsyncJsonResponse *response = new AsyncJsonResponse();
     JsonObject &retMsg = response->getRoot();
@@ -190,13 +196,45 @@ void CgScaleWebApi::OnCalibrationScalePost(AsyncWebServerRequest *request)
         return;
     }
 
-    if (!(root.containsKey("FrontCalibrationFactor") && root.containsKey("BackCalibrationFactor") && root.containsKey("WingPegDistance") && root.containsKey("LengthWingstopperToFrontWingpeg")))
+    if (!(root.containsKey("FrontCalibrationFactor") 
+            && root.containsKey("BackCalibrationFactor") 
+            && root.containsKey("WingPegDistance") 
+            && root.containsKey("LengthWingstopperToFrontWingpeg") 
+            && root.containsKey("Hostname") 
+            && root.containsKey("AutoconnectSsid") 
+            && root.containsKey("AutoconnectPassword") 
+            && root.containsKey("AccesspointModeSsid") 
+            && root.containsKey("AccesspointModePassword")))
     {
         retMsg[F("message")] = F("Values are missing!");
         response->setLength();
         request->send(response);
         return;
     }
+
+    String wifiConfigValue;
+    wifiConfigValue = root[F("Hostname")].as<String>();
+
+    if (wifiConfigValue == "")
+    {
+        retMsg[F("message")] = F("Hostname can't be empty!");
+        response->setLength();
+        request->send(response);
+        return;
+    }
+    Config.hostname = wifiConfigValue;
+
+    wifiConfigValue = root[F("AutoconnectSsid")].as<String>();
+    Config.autoconnectSsid = wifiConfigValue;
+
+    wifiConfigValue = root[F("AutoconnectPassword")].as<String>();
+    Config.autoconnectPassword = wifiConfigValue;
+
+    wifiConfigValue = root[F("AccesspointModeSsid")].as<String>();
+    Config.accesspointModeSsid = wifiConfigValue;
+
+    wifiConfigValue = root[F("AccesspointModePassword")].as<String>();
+    Config.accesspointModePassword = wifiConfigValue;
 
     float value = 0;
     value = root[F("FrontCalibrationFactor")].as<float>();
@@ -224,14 +262,6 @@ void CgScaleWebApi::OnCalibrationScalePost(AsyncWebServerRequest *request)
 
     value = root[F("WingPegDistance")].as<float>();
 
-    if (value == 0)
-    {
-        retMsg[F("message")] = F("Wingpeg distance can't be 0!");
-        response->setLength();
-        request->send(response);
-        return;
-    }
-
     if (value < 0)
     {
         retMsg[F("message")] = F("WinpPeg distance can't smaller than 0!");
@@ -243,14 +273,6 @@ void CgScaleWebApi::OnCalibrationScalePost(AsyncWebServerRequest *request)
     Config.WingPegDistance = value;
 
     value = root[F("LengthWingstopperToFrontWingpeg")].as<float>();
-
-    if (value == 0)
-    {
-        retMsg[F("message")] = F("Distance wingstopper to first wingpeg can't be 0!");
-        response->setLength();
-        request->send(response);
-        return;
-    }
 
     if (value < 0)
     {
@@ -277,8 +299,8 @@ void CgScaleWebApi::OnModelsGet(AsyncWebServerRequest *request)
     JsonObject &root = response->getRoot();
     JsonArray &modelsJson = root.createNestedArray("Models");
 
-    for (CGModel value : Models.models) 
-    { 
+    for (CGModel value : Models.models)
+    {
         JsonObject &model = modelsJson.createNestedObject();
         model[F("ModelName")] = value.Name;
         model[F("ModelWeight")] = value.Weight;
@@ -437,8 +459,8 @@ void CgScaleWebApi::Setup(CgScale *scale)
     });
 
     server.on("/api/scale", HTTP_GET, std::bind(&CgScaleWebApi::OnScaleGet, this, _1));
-    server.on("/api/calibration", HTTP_GET, std::bind(&CgScaleWebApi::OnCalibrationScaleGet, this, _1));
-    server.on("/api/calibration", HTTP_POST, std::bind(&CgScaleWebApi::OnCalibrationScalePost, this, _1));
+    server.on("/api/settings", HTTP_GET, std::bind(&CgScaleWebApi::OnSettingsGet, this, _1));
+    server.on("/api/settings", HTTP_POST, std::bind(&CgScaleWebApi::OnSettingsPost, this, _1));
     server.on("/api/models/delete", HTTP_POST, std::bind(&CgScaleWebApi::OnModelsDeletePost, this, _1));
     server.on("/api/models", HTTP_GET, std::bind(&CgScaleWebApi::OnModelsGet, this, _1));
     server.on("/api/models", HTTP_POST, std::bind(&CgScaleWebApi::OnModelsPost, this, _1));
