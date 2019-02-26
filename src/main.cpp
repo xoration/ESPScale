@@ -16,6 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with ESPScale.  If not, see <http://www.gnu.org/licenses/>.
 */
+//#define DISPLAY
 
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
@@ -25,6 +26,10 @@
 #include "CgScale.h"
 #include "CGModels.h"
 #include "elapsedMillis.h"
+
+#ifdef DISPLAY
+#include "U8g2lib.h"
+#endif
 
 AsyncWebServer server(80);
 
@@ -37,6 +42,9 @@ WiFiEventHandler gotIpEventHandler, disconnectedEventHandler;
 CgScale scale;
 long t = 0;
 
+#ifdef DISPLAY
+U8G2_SH1106_128X64_NONAME_1_HW_I2C oledDisplay(U8G2_R0, /* reset=*/U8X8_PIN_NONE, /* clock=*/D3, /* data=*/D4);
+#endif
 
 void StationModeDisconnected(const WiFiEventStationModeDisconnected &event);
 void StationModeGotIP(const WiFiEventStationModeGotIP &event);
@@ -47,6 +55,13 @@ void setup()
     Serial.setDebugOutput(true);
     SPIFFS.begin();
     Config.LoadConfiguration();
+
+#ifdef DISPLAY
+    oledDisplay.begin();
+    oledDisplay.setPowerSave(0);
+
+    oledDisplay.setFont(u8g2_font_ncenB14_tr);
+#endif
 
     wifi_station_set_hostname(const_cast<char *>(Config.hostname.c_str()));
     disconnectedEventHandler = WiFi.onStationModeDisconnected(&StationModeDisconnected);
@@ -74,6 +89,21 @@ void loop()
     }
 
     scale.Loop();
+
+#ifdef DISPLAY
+    oledDisplay.firstPage();
+    do
+    {
+        oledDisplay.setCursor(90, 20);
+        oledDisplay.print("CG: ");
+        oledDisplay.setCursor(0, 20);
+        oledDisplay.print(scale.CG);
+        oledDisplay.setCursor(90, 50);
+        oledDisplay.print("Weight: ");
+        oledDisplay.setCursor(0, 50);
+        oledDisplay.print(scale.TotalWeight);
+    } while (oledDisplay.nextPage());
+#endif
 }
 
 void StationModeDisconnected(const WiFiEventStationModeDisconnected &event)

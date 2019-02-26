@@ -20,11 +20,8 @@
 #ifndef _CGSCALECONFIGURATION_h
 #define _CGSCALECONFIGURATION_h
 
-#if defined(ARDUINO) && ARDUINO >= 100
 #include "arduino.h"
-#else
-#include "WProgram.h"
-#endif
+#include <list>
 
 class Configuration
 {
@@ -33,6 +30,7 @@ class Configuration
     Configuration();
     void LoadConfiguration();
     void SaveConfiguration();
+
     float WingPegDistance;
     float LengthWingstopperToFrontWingpeg;
     float FrontCellCalibrationFactor;
