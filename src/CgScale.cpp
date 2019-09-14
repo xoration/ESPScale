@@ -94,6 +94,12 @@ void CgScale::Reload()
     this->CGOffset = ((this->wingPegDistance / 2) + this->lengthWingstopperToFrontWingpeg);
 }
 
+void CgScale::Tare()
+{
+	loadCell_front.tareNoDelay();
+	loadCell_back.tareNoDelay();
+}
+
 void CgScale::Loop()
 {
     if (needsSetup)

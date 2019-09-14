@@ -51,6 +51,7 @@ class CgScale
     void SetFrontCalibrationFactor(float factor);
     void SetBackCalibrationFactor(float factor);
     void Reload();
+    void Tare();
     
     void Loop();
 

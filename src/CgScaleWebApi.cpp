@@ -140,6 +140,17 @@ void CgScaleWebApi::OnScaleGet(AsyncWebServerRequest *request)
     request->send(response);
 }
 
+void CgScaleWebApi::OnScaleTare(AsyncWebServerRequest *request)
+{
+    AsyncJsonResponse *response = new AsyncJsonResponse();
+    JsonObject &root = response->getRoot();
+
+	localScale->Tare();
+
+    response->setLength();
+    request->send(response);
+}
+
 void CgScaleWebApi::OnSettingsGet(AsyncWebServerRequest *request)
 {
     AsyncJsonResponse *response = new AsyncJsonResponse();
@@ -459,6 +470,7 @@ void CgScaleWebApi::Setup(CgScale *scale)
     });
 
     server.on("/api/scale", HTTP_GET, std::bind(&CgScaleWebApi::OnScaleGet, this, _1));
+    server.on("/api/scale/tare", HTTP_POST, std::bind(&CgScaleWebApi::OnScaleTare, this, _1));
     server.on("/api/settings", HTTP_GET, std::bind(&CgScaleWebApi::OnSettingsGet, this, _1));
     server.on("/api/settings", HTTP_POST, std::bind(&CgScaleWebApi::OnSettingsPost, this, _1));
     server.on("/api/models/delete", HTTP_POST, std::bind(&CgScaleWebApi::OnModelsDeletePost, this, _1));
