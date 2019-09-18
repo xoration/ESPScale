@@ -111,6 +111,20 @@
       });
     });
 
+	function tareScale(e) {
+		var jsonData = {
+		};
+
+		$.ajax({
+			url: '/api/scale/tare',
+			type: 'post',
+			dataType: 'json',
+			data: { 'data': JSON.stringify(jsonData) },
+			success: function (data, textStatus, jQxhr) {},
+			error: function (jQxhr, textStatus, errorThrown) {}
+		});
+	};
+
     setInterval(RefreshData, 1000);
 
   </script>
@@ -136,7 +150,7 @@
     </ul>
   </nav>
 
-  <div class="container" id="CalibrationNecessary" style="display: none;">>
+  <div class="container" id="CalibrationNecessary" style="display: none;">
     <div class="alert alert-danger">
       <strong>Calibration Necessary!</strong>
     </div>
@@ -156,7 +170,8 @@
             <tr>
               <th align="left">Weight</th>
               <td>
-                <span id="Weight"></span> g</td>
+                <a onclick="tareScale(this)"><span id="Weight"></span> g</a>
+              </td>
             </tr>
             <tr>
               <th><input type="text" class="form-control" id="ModelName"></th>
@@ -167,6 +182,7 @@
       </div>
     </div>
   </form>
+  
 </body>
 
 </html>
