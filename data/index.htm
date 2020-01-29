@@ -123,7 +123,22 @@
 			success: function (data, textStatus, jQxhr) {},
 			error: function (jQxhr, textStatus, errorThrown) {}
 		});
-	};
+  };
+  
+  /*
+  $("#tare").click()(function(){
+    var jsonData = {
+		};
+		$.ajax({
+			url: '/api/scale/tare',
+			type: 'post',
+			dataType: 'json',
+			data: { 'data': JSON.stringify(jsonData) },
+			success: function (data, textStatus, jQxhr) {},
+			error: function (jQxhr, textStatus, errorThrown) {}
+		});
+  });
+  */
 
     setInterval(RefreshData, 1000);
 
@@ -151,7 +166,7 @@
   </nav>
 
   <div class="container" id="CalibrationNecessary" style="display: none;">
-    <div class="alert alert-danger">
+    <div class="alert alert-dangserverer">
       <strong>Calibration Necessary!</strong>
     </div>
   </div>
@@ -180,6 +195,10 @@
           </tbody>
         </table>
       </div>
+      <div class="container">
+        <!-- button type="button" class="btn btn-secondary" id="tare">Tare</!-- button> -->
+      </div>
+      
     </div>
   </form>
   

@@ -20,7 +20,7 @@
 #ifndef _CGSCALECONFIGURATION_h
 #define _CGSCALECONFIGURATION_h
 
-#include "arduino.h"
+#include "Arduino.h"
 #include <list>
 
 class Configuration
