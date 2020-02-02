@@ -26,14 +26,14 @@
   <meta name="apple-mobile-web-app-title" content="CG Scale" />
   <meta name="apple-mobile-web-app-capable" content="yes">
 
-  <link rel="stylesheet" src="css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="css/bootstrap.min.css" crossorigin="anonymous">
 
+
   <title>CG Scale</title>
   <script src="js/combined.js"></script>
-  
   <script>
     // iOS Web App Full Screen View
     $(document).ready(function () {
@@ -151,7 +151,7 @@
   </nav>
 
   <div class="container" id="CalibrationNecessary" style="display: none;">
-    <div class="alert alert-dangserverer">
+    <div class="alert alert-danger">
       <strong>Calibration Necessary!</strong>
     </div>
   </div>
@@ -161,7 +161,7 @@
       <div class="panel-heading">Scale Information</div>
       <div class="panel-body">
         <table class="table table-hover table-condensed">
-          <tbody id="scale-data"></div>
+          <tbody id="scale-data">
             <tr>
               <th align="left">Center of Gravity</th>
               <td>
