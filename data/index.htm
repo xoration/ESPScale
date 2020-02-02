@@ -26,14 +26,14 @@
   <meta name="apple-mobile-web-app-title" content="CG Scale" />
   <meta name="apple-mobile-web-app-capable" content="yes">
 
-  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" src="css/font-awesome.min.css">
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="css/bootstrap.min.css" crossorigin="anonymous">
 
-
   <title>CG Scale</title>
   <script src="js/combined.js"></script>
+  
   <script>
     // iOS Web App Full Screen View
     $(document).ready(function () {
@@ -124,23 +124,8 @@
 			error: function (jQxhr, textStatus, errorThrown) {}
 		});
   };
-  
-  /*
-  $("#tare").click()(function(){
-    var jsonData = {
-		};
-		$.ajax({
-			url: '/api/scale/tare',
-			type: 'post',
-			dataType: 'json',
-			data: { 'data': JSON.stringify(jsonData) },
-			success: function (data, textStatus, jQxhr) {},
-			error: function (jQxhr, textStatus, errorThrown) {}
-		});
-  });
-  */
 
-    setInterval(RefreshData, 1000);
+  setInterval(RefreshData, 1000);
 
   </script>
 
@@ -176,7 +161,7 @@
       <div class="panel-heading">Scale Information</div>
       <div class="panel-body">
         <table class="table table-hover table-condensed">
-          <tbody id="scale-data">
+          <tbody id="scale-data"></div>
             <tr>
               <th align="left">Center of Gravity</th>
               <td>
@@ -195,13 +180,20 @@
           </tbody>
         </table>
       </div>
-      <div class="container">
-        <!-- button type="button" class="btn btn-secondary" id="tare">Tare</!-- button> -->
+      <div class="container" id="misc">
+        <button type="button" class="btn btn-secondary" id="tare">Tare</button>
       </div>
       
     </div>
   </form>
   
+  <script>   
+    $("#tare").on('click',function() {
+        tareScale(this);
+        misc.insertAdjacentHTML('beforeend','<br>tared!');
+    });  
+  </script>
+
 </body>
 
 </html>
