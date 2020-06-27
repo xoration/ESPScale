@@ -123,9 +123,9 @@
 			success: function (data, textStatus, jQxhr) {},
 			error: function (jQxhr, textStatus, errorThrown) {}
 		});
-	};
+  };
 
-    setInterval(RefreshData, 1000);
+  setInterval(RefreshData, 1000);
 
   </script>
 
@@ -180,9 +180,20 @@
           </tbody>
         </table>
       </div>
+      <div class="container" id="misc">
+        <button type="button" class="btn btn-secondary" id="tare">Tare</button>
+      </div>
+      
     </div>
   </form>
   
+  <script>   
+    $("#tare").on('click',function() {
+        tareScale(this);
+        misc.insertAdjacentHTML('beforeend','<br>tared!');
+    });  
+  </script>
+
 </body>
 
 </html>
